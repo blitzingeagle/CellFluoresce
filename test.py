@@ -9,8 +9,9 @@ device = torch.device("cuda")
 
 model = models["256"].to(device)
 
-module_path = "modules/cell_fluoresce_10x"
-weights = torch.load(os.path.join(module_path, "checkpoints-256x256-256-mse_loss/save_250.pth"))
+module_path = "modules/cell_fluoresce_100x"
+weights = torch.load(os.path.join(module_path, "checkpoints/save_250.pth"))
+# weights = torch.load(os.path.join("modules/cell_fluoresce_10x", "checkpoints/save_250.pth"))
 model.load_state_dict(weights)
 
 

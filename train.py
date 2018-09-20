@@ -21,7 +21,7 @@ loss_fn = F.mse_loss
 log_interval = 1
 save_interval = 5
 
-module_name = "cell_fluoresce_10x"
+module_name = "cell_fluoresce_100x"
 
 
 def train(train_data):
@@ -71,7 +71,7 @@ if __name__ == "__main__":
             output_cuda = torch.from_numpy(output_img.reshape(output_shape)).float().cuda()
 
             train_data.append((input_cuda, output_cuda))
-    train_data = train_data[0:10]
+    train_data = train_data[0:1]
 
     for epoch in range(1, epochs + 1):
         print("Epoch: %d" % epoch)
