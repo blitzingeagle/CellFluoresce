@@ -9,21 +9,6 @@ import torch.optim as optim
 
 from models import models
 
-device = torch.device("cuda")
-
-model = models["256"].to(device)
-
-learning_rate = 0.0001
-learning_rate_decay = 0.95
-optimizer = optim.Adam(model.parameters(), lr=learning_rate)
-loss_fn = F.mse_loss
-
-log_interval = 1
-save_interval = 5
-
-module_name = "cell_fluoresce_100x"
-
-
 def train(train_data):
     model.train()
     for batch_idx, (input, target) in enumerate(train_data):
@@ -38,6 +23,20 @@ def train(train_data):
 
 
 if __name__ == "__main__":
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+    model = models["256"].to(device)
+
+    learning_rate = 0.0001
+    learning_rate_decay = 0.95
+    optimizer = optim.Adam(model.parameters(), lr=learning_rate)
+    loss_fn = F.mse_loss
+
+    log_interval = 1
+    save_interval = 5
+
+    module_name = "cell_fluoresce_100x"
+
     train_dir = os.path.join("modules", module_name, "dataset")
     train_data = []
     batch_size = 50
@@ -67,11 +66,11 @@ if __name__ == "__main__":
             input_shape = (1,) + input_img.shape
             output_shape = (1,) + output_img.shape
 
-            input_cuda = torch.from_numpy(input_img.reshape(input_shape)).float().cuda()
-            output_cuda = torch.from_numpy(output_img.reshape(output_shape)).float().cuda()
+            input_cuda = torch.from_numpy(input_img.reshape(input_shape)).float().to(device)
+            output_cuda = torch.from_numpy(output_img.reshape(output_shape)).float().to(device)
 
             train_data.append((input_cuda, output_cuda))
-    train_data = train_data[0:1]
+    train_data = train_data[0:10]
 
     for epoch in range(1, epochs + 1):
         print("Epoch: %d" % epoch)
